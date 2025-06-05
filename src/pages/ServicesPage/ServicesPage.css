@@ -14,12 +14,12 @@
 .services-title {
   font-size: 3rem;
   font-weight: 300;
-  color: #20303c;
+  color: var(--color-text-dark);
   margin-bottom: 1.25rem;
 }
 .services-subtitle {
   font-size: 1.2rem;
-  color: #20303cbb;
+  color: var(--color-text-muted);
   max-width: 540px;
   margin: 0 auto;
 }
@@ -42,7 +42,7 @@
   gap: 2.4rem;
   justify-content: center;
   align-items: center;
-  border-bottom: 2px solid #ece2d6;
+  border-bottom: 2px solid hsl(var(--border));
   margin-bottom: 2.5rem;
   background: transparent;
   padding-left: 0.4rem;
@@ -60,7 +60,7 @@
   flex: 0 0 auto;
   background: none;
   border: none;
-  color: #1b1b1b;
+  color: var(--color-text-dark);
   font-size: 1.1rem;
   font-weight: 500;
   text-transform: uppercase;
@@ -76,7 +76,7 @@
   scroll-snap-align: start;
 }
 .services-tab.active {
-  color: #181818;
+  color: var(--color-text-dark);
   font-weight: 700;
 }
 
@@ -146,11 +146,11 @@
 .services-booking-title {
   font-size: 2rem;
   font-weight: 300;
-  color: #20303c;
+  color: var(--color-text-dark);
   margin-bottom: 1rem;
 }
 .services-booking-desc {
-  color: #20303cbb;
+  color: var(--color-text-muted);
   font-size: 1.13rem;
   margin-bottom: 2rem;
 }
