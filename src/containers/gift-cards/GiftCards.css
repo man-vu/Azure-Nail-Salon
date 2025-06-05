@@ -86,12 +86,14 @@
   margin-bottom: 1.5rem;
 }
 
-.dark .promo-title,
-
 .promo-text {
   font-size: 1.125rem;
   color: white;
   margin-bottom: 1.5rem;
+}
+
+.dark .promo-title {
+  color: hsl(var(--primary-foreground));
 }
 
 .dark .promo-text {
