@@ -214,3 +214,22 @@ body, html {
   color: #888;
   font-size: 1.05rem;
 }
+
+.dark .sidebar-mask {
+  background: rgba(0,0,0,0.55);
+  color: var(--color-text-muted);
+}
+
+.submission-message {
+  margin-top: 1rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+.submission-message.success {
+  color: var(--color-primary);
+}
+
+.submission-message.error {
+  color: #e02424;
+}

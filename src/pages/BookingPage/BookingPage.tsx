@@ -41,6 +41,10 @@ const BookingPage = () => {
   const [events, setEvents] = useState<BookingEvent[]>([]);
   const [step, setStep] = useState(0);
   const [showReview, setShowReview] = useState(false);
+  const [submissionStatus, setSubmissionStatus] = useState<
+    | { type: 'success' | 'error'; message: string }
+    | null
+  >(null);
   const isMobile = useIsMobile(); // <-- use the custom hook
 
 useEffect(() => {
@@ -171,25 +175,54 @@ useEffect(() => {
 
   const handleSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
+    setSubmissionStatus(null);
+
+    // basic validation
+    if (!formData.category || !formData.service || !formData.designer || !formData.start || !formData.end) {
+      setSubmissionStatus({ type: 'error', message: 'Please complete all booking steps.' });
+      return;
+    }
+
     const serviceObj = categories
       .flatMap(c => c.Services || [])
       .find(s => (s.title || s.name) === formData.service);
-    if (!serviceObj) return;
+
+    if (!serviceObj) {
+      setSubmissionStatus({ type: 'error', message: 'Selected service is invalid.' });
+      return;
+    }
+
+    // sanitize ids to avoid injection
+    const sanitize = (val: string | number) => String(val).replace(/["'`;]/g, '');
+
+    const payload = {
+      serviceId: sanitize(serviceObj.id),
+      designerId: sanitize(formData.designer),
+      startTime: formData.start?.toISOString(),
+      endTime: formData.end?.toISOString(),
+    };
+
     fetch(`${API_BASE_URL}/bookings`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        serviceId: serviceObj.id,
-        designerId: formData.designer,
-        startTime: formData.start,
-        endTime: formData.end,
-      })
+      body: JSON.stringify(payload),
     })
-      .then(() => {
-        setShowReview(false);
-        setStep(0);
-        setFormData({ category: null, service: '', designer: '', start: null, end: null });
-      });
+      .then(async res => {
+        if (res.ok) {
+          setSubmissionStatus({ type: 'success', message: 'Booking saved successfully.' });
+          setShowReview(false);
+          setStep(0);
+          setFormData({ category: null, service: '', designer: '', start: null, end: null });
+        } else {
+          const data = await res.json().catch(() => ({}));
+          let message = data.error || 'Failed to save booking.';
+          if (res.status === 401) {
+            message = 'You must be logged in to create a booking.';
+          }
+          setSubmissionStatus({ type: 'error', message });
+        }
+      })
+      .catch(() => setSubmissionStatus({ type: 'error', message: 'Network error. Please try again.' }));
   };
 
   const handleReviewClose = () => {
@@ -293,6 +326,11 @@ useEffect(() => {
             </AnimatePresence>
           </div>
         </div>
+        {submissionStatus && (
+          <p className={`submission-message ${submissionStatus.type}`}>
+            {submissionStatus.message}
+          </p>
+        )}
       </div>
       <ReviewModal
         open={showReview}
