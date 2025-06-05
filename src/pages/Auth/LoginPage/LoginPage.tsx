@@ -17,9 +17,9 @@ const LoginPage = ({ switchToRegister }: Props) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = login(identifier, password);
+    const success = await login(identifier, password);
     if (success) {
       navigate('/');
     } else {

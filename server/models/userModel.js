@@ -19,3 +19,11 @@ export function findByIdentifier(identifier) {
 export function findById(id) {
   return prisma.user.findUnique({ where: { id } });
 }
+
+export function findByUsername(username) {
+  return prisma.user.findUnique({ where: { username } });
+}
+
+export function findByEmail(email) {
+  return prisma.user.findUnique({ where: { email } });
+}

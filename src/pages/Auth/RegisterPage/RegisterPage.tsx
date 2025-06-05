@@ -23,13 +23,13 @@ const RegisterPage = ({ switchToLogin }: Props) => {
   const [confirm, setConfirm] = useState('')
   const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirm) {
       setError('Passwords do not match');
       return;
     }
-    register({
+    const success = await register({
       username,
       email,
       firstName,
@@ -37,8 +37,8 @@ const RegisterPage = ({ switchToLogin }: Props) => {
       phone,
       language,
       password,
-    })
-    navigate('/');
+    });
+    if (success) navigate('/');
   };
 
   return (

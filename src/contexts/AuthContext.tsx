@@ -11,20 +11,12 @@ interface User {
 
 interface AuthContextProps {
   user: User | null;
-  login: (identifier: string, password: string) => boolean
-  register: (data: User & { password: string }) => void
+  login: (identifier: string, password: string) => Promise<boolean>;
+  register: (data: User & { password: string }) => Promise<boolean>;
   logout: () => void;
 }
 
-const dummyCredentials = {
-  username: 'demo',
-  email: 'demo@example.com',
-  phone: '1234567890',
-  password: 'password',
-  firstName: 'Demo',
-  lastName: 'User',
-  language: 'English',
-};
+import { API_BASE_URL } from '@/config';
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
@@ -32,34 +24,57 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('auth-user');
-    if (storedUser) setUser(JSON.parse(storedUser));
+    const token = localStorage.getItem('auth-token');
+    if (token) {
+      fetch(`${API_BASE_URL}/me`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(res => (res.ok ? res.json() : null))
+        .then(data => {
+          if (data) {
+            setUser(data);
+            localStorage.setItem('auth-user', JSON.stringify(data));
+          } else {
+            localStorage.removeItem('auth-token');
+          }
+        })
+        .catch(() => localStorage.removeItem('auth-token'));
+    }
   }, []);
 
-  const login = (identifier: string, password: string) => {
-    if (
-      password === dummyCredentials.password &&
-      [dummyCredentials.username, dummyCredentials.email, dummyCredentials.phone].includes(identifier)
-    ) {
-      const { username, email, firstName, lastName, phone, language } = dummyCredentials
-      const u = { username, email, firstName, lastName, phone, language }
-      setUser(u)
-      localStorage.setItem('auth-user', JSON.stringify(u))
-      return true
-    }
-    return false
-  }
+  const login = async (identifier: string, password: string) => {
+    const res = await fetch(`${API_BASE_URL}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ identifier, password })
+    });
+    if (!res.ok) return false;
+    const { token } = await res.json();
+    localStorage.setItem('auth-token', token);
+    const meRes = await fetch(`${API_BASE_URL}/me`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!meRes.ok) return false;
+    const data = await meRes.json();
+    setUser(data);
+    localStorage.setItem('auth-user', JSON.stringify(data));
+    return true;
+  };
 
-  const register = (data: User & { password: string }) => {
-    const { password: _p, ...rest } = data
-    const u: User = { ...rest }
-    setUser(u)
-    localStorage.setItem('auth-user', JSON.stringify(u))
-  }
+  const register = async (data: User & { password: string }) => {
+    const res = await fetch(`${API_BASE_URL}/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) return false;
+    return login(data.email || data.username, data.password);
+  };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('auth-user');
+    localStorage.removeItem('auth-token');
   };
 
   return (
