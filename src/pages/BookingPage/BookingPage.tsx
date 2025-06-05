@@ -202,9 +202,14 @@ useEffect(() => {
       endTime: formData.end?.toISOString(),
     };
 
+    const token = localStorage.getItem('auth-token');
+
     fetch(`${API_BASE_URL}/bookings`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
       body: JSON.stringify(payload),
     })
       .then(async res => {
