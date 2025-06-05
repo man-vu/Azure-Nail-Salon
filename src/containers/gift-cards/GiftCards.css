@@ -35,6 +35,15 @@
   background-color: #f8bbd0;
 }
 
+/* Dark mode overrides */
+.dark .follow-panel {
+  background-color: var(--color-card-bg);
+}
+
+.dark .promo-panel {
+  background-color: var(--color-primary);
+}
+
 .panel-content {
   text-align: center;
 }
@@ -69,6 +78,7 @@
   background-color: var(--color-primary-hover);
 }
 
+
 .promo-title {
   font-size: 2.5rem;
   font-weight: 700;
@@ -80,6 +90,14 @@
   font-size: 1.125rem;
   color: white;
   margin-bottom: 1.5rem;
+}
+
+.dark .promo-title {
+  color: hsl(var(--primary-foreground));
+}
+
+.dark .promo-text {
+  color: hsl(var(--primary-foreground));
 }
 
 .promo-button {

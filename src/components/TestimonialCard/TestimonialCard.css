@@ -36,7 +36,7 @@
 
 .testimonial-card blockquote {
   font-style: italic;
-  color: #555;
+  color: var(--color-text-muted);
   margin-bottom: 1rem;
   line-height: 1.6;
 }
@@ -50,6 +50,6 @@
 
 .testimonial-card p {
   font-size: 0.9rem;
-  color: #777;
+  color: var(--color-text-muted);
   margin: 0;
 }
