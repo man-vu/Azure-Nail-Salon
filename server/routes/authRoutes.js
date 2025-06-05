@@ -19,8 +19,8 @@ router.post(
     try {
       const user = await register(req.body);
       res.json(user);
-    } catch {
-      res.status(400).json({ error: 'User already exists' });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
     }
   }
 );

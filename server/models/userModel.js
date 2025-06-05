@@ -1,11 +1,11 @@
 import { prisma } from '../prisma/client.js';
 
 export function createUser(data) {
-  return prisma.user.create({ data });
+  return prisma.users.create({ data });
 }
 
 export function findByIdentifier(identifier) {
-  return prisma.user.findFirst({
+  return prisma.users.findFirst({
     where: {
       OR: [
         { username: identifier },
@@ -17,13 +17,13 @@ export function findByIdentifier(identifier) {
 }
 
 export function findById(id) {
-  return prisma.user.findUnique({ where: { id } });
+  return prisma.users.findUnique({ where: { id } });
 }
 
 export function findByUsername(username) {
-  return prisma.user.findUnique({ where: { username } });
+  return prisma.users.findUnique({ where: { username } });
 }
 
 export function findByEmail(email) {
-  return prisma.user.findUnique({ where: { email } });
+  return prisma.users.findUnique({ where: { email } });
 }
