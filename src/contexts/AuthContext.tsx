@@ -9,10 +9,15 @@ interface User {
   language: string
 }
 
+interface AuthResult {
+  success: boolean
+  message?: string
+}
+
 interface AuthContextProps {
   user: User | null;
-  login: (identifier: string, password: string) => Promise<boolean>;
-  register: (data: User & { password: string }) => Promise<boolean>;
+  login: (identifier: string, password: string) => Promise<AuthResult>;
+  register: (data: User & { password: string }) => Promise<AuthResult>;
   logout: () => void;
 }
 
@@ -42,32 +47,57 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  const login = async (identifier: string, password: string) => {
+  const login = async (
+    identifier: string,
+    password: string
+  ): Promise<AuthResult> => {
     const res = await fetch(`${API_BASE_URL}/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ identifier, password })
     });
-    if (!res.ok) return false;
+    if (!res.ok) {
+      let message = 'Invalid credentials';
+      try {
+        const err = await res.json();
+        message = err.error || err.errors?.[0]?.msg || message;
+      } catch {
+        // ignore json parse errors
+      }
+      return { success: false, message };
+    }
     const { token } = await res.json();
     localStorage.setItem('auth-token', token);
     const meRes = await fetch(`${API_BASE_URL}/me`, {
       headers: { Authorization: `Bearer ${token}` }
     });
-    if (!meRes.ok) return false;
+    if (!meRes.ok) {
+      return { success: false, message: 'Failed to fetch user' };
+    }
     const data = await meRes.json();
     setUser(data);
     localStorage.setItem('auth-user', JSON.stringify(data));
-    return true;
+    return { success: true };
   };
 
-  const register = async (data: User & { password: string }) => {
+  const register = async (
+    data: User & { password: string }
+  ): Promise<AuthResult> => {
     const res = await fetch(`${API_BASE_URL}/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
-    if (!res.ok) return false;
+    if (!res.ok) {
+      let message = 'Registration failed';
+      try {
+        const err = await res.json();
+        message = err.error || err.errors?.[0]?.msg || message;
+      } catch {
+        // ignore json parse errors
+      }
+      return { success: false, message };
+    }
     return login(data.email || data.username, data.password);
   };
 

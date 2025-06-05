@@ -19,11 +19,11 @@ const LoginPage = ({ switchToRegister }: Props) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = await login(identifier, password);
-    if (success) {
+    const result = await login(identifier, password);
+    if (result.success) {
       navigate('/');
     } else {
-      setError('Invalid credentials');
+      setError(result.message || 'Login failed');
     }
   };
 

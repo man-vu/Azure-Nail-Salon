@@ -29,7 +29,7 @@ const RegisterPage = ({ switchToLogin }: Props) => {
       setError('Passwords do not match');
       return;
     }
-    const success = await register({
+    const result = await register({
       username,
       email,
       firstName,
@@ -38,7 +38,11 @@ const RegisterPage = ({ switchToLogin }: Props) => {
       language,
       password,
     });
-    if (success) navigate('/');
+    if (result.success) {
+      navigate('/');
+    } else {
+      setError(result.message || 'Registration failed');
+    }
   };
 
   return (
