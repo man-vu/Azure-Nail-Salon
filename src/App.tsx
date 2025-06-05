@@ -16,8 +16,7 @@ const ServicesPage = lazy(() => import('./pages/ServicesPage/ServicesPage'));
 const TeamPage = lazy(() => import('./pages/TeamPage/TeamPage'));
 const ContactUsPage = lazy(() => import('./pages/ContactUsPage/ContactUsPage'));
 const GiftCardPage = lazy(() => import('./pages/GiftCardPage/GiftCardPage'));
-const LoginPage = lazy(() => import('./pages/Auth/LoginPage/LoginPage'));
-const RegisterPage = lazy(() => import('./pages/Auth/RegisterPage/RegisterPage'));
+const AuthPage = lazy(() => import('./pages/Auth/AuthPage'));
 
 const pageTransition = {
   initial: { opacity: 0, y: 30 },
@@ -106,15 +105,7 @@ function AnimatedRoutes() {
           path="/login"
           element={
             <motion.div {...pageTransition}>
-              <LoginPage />
-            </motion.div>
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            <motion.div {...pageTransition}>
-              <RegisterPage />
+              <AuthPage />
             </motion.div>
           }
         />

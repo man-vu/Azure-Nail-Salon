@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, ChevronDown, LogIn, UserPlus, LogOut, Sun, Moon } from "lucide-react";
+import { Menu, X, ChevronDown, LogIn, LogOut, Sun, Moon } from "lucide-react";
 import { Button } from "../ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
@@ -74,14 +74,9 @@ const Header = () => {
               <LogOut size={18} className="icon-gap" /> Logout
             </button>
           ) : (
-            <>
-              <Link to="/login" className="nav-link">
-                <LogIn size={18} className="icon-gap" /> Login
-              </Link>
-              <Link to="/register" className="nav-link">
-                <UserPlus size={18} className="icon-gap" /> Register
-              </Link>
-            </>
+            <Link to="/login" className="nav-link">
+              <LogIn size={18} className="icon-gap" /> Login
+            </Link>
           )}
           <Button
             variant="ghost"
@@ -143,14 +138,9 @@ const Header = () => {
                 Logout
               </button>
             ) : (
-              <>
-                <Link to="/login" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
-                  Login
-                </Link>
-                <Link to="/register" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
-                  Register
-                </Link>
-              </>
+              <Link to="/login" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
+                Login
+              </Link>
             )}
             <div className="mobile-book-button">
               <Link to="/booking"><Button className="book-button">{headerContent.bookNowButton}</Button></Link>

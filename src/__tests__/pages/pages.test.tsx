@@ -6,8 +6,7 @@ import ServicesPage from '@/pages/ServicesPage/ServicesPage'
 import TeamPage from '@/pages/TeamPage/TeamPage'
 import ContactUsPage from '@/pages/ContactUsPage/ContactUsPage'
 import GiftCardPage from '@/pages/GiftCardPage/GiftCardPage'
-import LoginPage from '@/pages/Auth/LoginPage/LoginPage'
-import RegisterPage from '@/pages/Auth/RegisterPage/RegisterPage'
+import AuthPage from '@/pages/Auth/AuthPage'
 
 describe('Page renders', () => {
   it('BookingPage', () => {
@@ -55,25 +54,14 @@ describe('Page renders', () => {
     expect(screen.getByRole('heading', { name: /gift card/i })).toBeInTheDocument()
   })
 
-  it('LoginPage', () => {
+  it('AuthPage', () => {
     render(
       <AuthProvider>
         <BrowserRouter>
-          <LoginPage />
+          <AuthPage />
         </BrowserRouter>
       </AuthProvider>
     )
     expect(screen.getByRole('heading', { name: /login/i })).toBeInTheDocument()
-  })
-
-  it('RegisterPage', () => {
-    render(
-      <AuthProvider>
-        <BrowserRouter>
-          <RegisterPage />
-        </BrowserRouter>
-      </AuthProvider>
-    )
-    expect(screen.getByRole('heading', { name: /register/i })).toBeInTheDocument()
   })
 })
