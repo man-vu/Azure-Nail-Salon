@@ -40,3 +40,20 @@
   color: #e11d48;
   text-align: center;
 }
+
+.switch-text {
+  text-align: center;
+  color: var(--color-text-muted);
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.switch-link {
+  color: var(--color-primary);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.switch-link:hover {
+  text-decoration: underline;
+}

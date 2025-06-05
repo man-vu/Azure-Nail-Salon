@@ -1,11 +1,16 @@
 import { useState } from 'react';
+import { UserPlus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import './RegisterPage.css';
 
-const RegisterPage = () => {
+interface Props {
+  switchToLogin?: () => void;
+}
+
+const RegisterPage = ({ switchToLogin }: Props) => {
   const { register } = useAuth();
   const navigate = useNavigate();
   const [username, setUsername] = useState('')
@@ -39,7 +44,9 @@ const RegisterPage = () => {
   return (
     <div className="login-bg">
       <form className="login-form" onSubmit={handleSubmit}>
-        <h1 className="login-title">Register</h1>
+        <h1 className="login-title flex items-center justify-center gap-2">
+          <UserPlus size={24} /> Register
+        </h1>
         <Input
           placeholder="Username"
           value={username}
@@ -91,6 +98,14 @@ const RegisterPage = () => {
         />
         {error && <p className="login-error">{error}</p>}
         <Button type="submit" className="login-button">Sign Up</Button>
+        {switchToLogin && (
+          <p className="switch-text">
+            Already have an account?{' '}
+            <span className="switch-link" onClick={switchToLogin}>
+              Login
+            </span>
+          </p>
+        )}
       </form>
     </div>
   );
