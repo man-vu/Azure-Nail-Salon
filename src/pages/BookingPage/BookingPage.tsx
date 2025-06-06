@@ -14,6 +14,7 @@ import { type Designer } from '@/data/designers';
 import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from '@/lib/useIsMobile'; // import the custom hook
 import { API_BASE_URL } from '@/config';
+import { apiFetch } from '@/lib/api';
 
 const steps = [
   'Select a service category',
@@ -202,13 +203,10 @@ useEffect(() => {
       endTime: formData.end?.toISOString(),
     };
 
-    const token = localStorage.getItem('auth-token');
-
-    fetch(`${API_BASE_URL}/bookings`, {
+    apiFetch('/bookings', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       body: JSON.stringify(payload),
     })

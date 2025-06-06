@@ -22,6 +22,7 @@ interface AuthContextProps {
 }
 
 import { API_BASE_URL } from '@/config';
+import { apiFetch } from '@/lib/api';
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
@@ -31,9 +32,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const token = localStorage.getItem('auth-token');
     if (token) {
-      fetch(`${API_BASE_URL}/me`, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
+      apiFetch('/me')
         .then(res => (res.ok ? res.json() : null))
         .then(data => {
           if (data) {
@@ -68,9 +67,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     const { token } = await res.json();
     localStorage.setItem('auth-token', token);
-    const meRes = await fetch(`${API_BASE_URL}/me`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    const meRes = await apiFetch('/me');
     if (!meRes.ok) {
       return { success: false, message: 'Failed to fetch user' };
     }
