@@ -86,6 +86,10 @@
   margin-bottom: 1.5rem;
 }
 
+.dark .promo-title {
+  color: hsl(var(--primary-foreground));
+}
+
 .promo-text {
   font-size: 1.125rem;
   color: white;
