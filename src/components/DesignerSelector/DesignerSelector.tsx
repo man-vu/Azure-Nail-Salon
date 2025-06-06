@@ -12,11 +12,13 @@ const DesignerSelector = ({ value, onChange, designers }: Props) => {
     onChange({ target: { name: 'designer', value: name } } as any);
   };
 
+  const list = Array.isArray(designers) ? designers : [];
+
   return (
     <div className="designer-selector">
       <h3 className="designer-heading">Choose your artist</h3>
       <div className="designer-grid">
-        {(designers ?? []).map((designer) => (
+        {list.map((designer) => (
           <div
             key={designer.name}
             className={`designer-card${value === designer.name ? ' selected' : ''}`}

@@ -51,15 +51,14 @@ const BookingPage = () => {
 useEffect(() => {
   console.log('Fetching categories...');
   fetch(`${API_BASE_URL}/categories`)
-    .then(res => {
-      
+    .then(async res => {
       console.log('Categories response status:', res.status);
+      if (!res.ok) return [];
       return res.json();
     })
     .then(data => {
-      
       console.log('Categories data:', data);
-      setCategories(data);
+      setCategories(Array.isArray(data) ? data : []);
     })
     .catch(error => {
       console.error('Error fetching categories:', error);
@@ -68,13 +67,14 @@ useEffect(() => {
 
   console.log('Fetching designers...');
   fetch(`${API_BASE_URL}/designers`)
-    .then(res => {
+    .then(async res => {
       console.log('Designers response status:', res.status);
+      if (!res.ok) return [];
       return res.json();
     })
     .then(data => {
       console.log('Designers data:', data);
-      setDesignerData(data);
+      setDesignerData(Array.isArray(data) ? data : []);
     })
     .catch(error => {
       console.error('Error fetching designers:', error);
@@ -92,8 +92,11 @@ useEffect(() => {
       return;
     }
     fetch(`${API_BASE_URL}/services/${serviceObj.id}/designers`)
-      .then(res => res.json())
-      .then(data => setDesignerData(data))
+      .then(async res => {
+        if (!res.ok) return [];
+        return res.json();
+      })
+      .then(data => setDesignerData(Array.isArray(data) ? data : []))
       .catch(() => setDesignerData([]));
   }, [formData.service, categories]);
 
@@ -116,15 +119,22 @@ useEffect(() => {
   useEffect(() => {
     if (!formData.designer) return;
     fetch(`${API_BASE_URL}/designers/${formData.designer}/services`)
-      .then(res => res.json())
-      .then(data => setDesignerServices(data))
+      .then(async res => {
+        if (!res.ok) return [];
+        return res.json();
+      })
+      .then(data => setDesignerServices(Array.isArray(data) ? data : []))
       .catch(() => setDesignerServices([]));
 
     fetch(`${API_BASE_URL}/designers/${formData.designer}/slots`)
-      .then(res => res.json())
+      .then(async res => {
+        if (!res.ok) return [];
+        return res.json();
+      })
       .then(data => {
+        const safeData = Array.isArray(data) ? data : [];
         setEvents(
-          data.map((s: any) => ({
+          safeData.map((s: any) => ({
             title: '',
             start: new Date(s.startTime),
             end: new Date(s.endTime),
