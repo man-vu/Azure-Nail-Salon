@@ -83,6 +83,21 @@ useEffect(() => {
 }, []);
 
   useEffect(() => {
+    if (!formData.service) return;
+    const serviceObj = categories
+      .flatMap(c => c.Services || [])
+      .find(s => (s.title || s.name) === formData.service);
+    if (!serviceObj) {
+      setDesignerData([]);
+      return;
+    }
+    fetch(`${API_BASE_URL}/services/${serviceObj.id}/designers`)
+      .then(res => res.json())
+      .then(data => setDesignerData(data))
+      .catch(() => setDesignerData([]));
+  }, [formData.service, categories]);
+
+  useEffect(() => {
     if (navState.category) {
       setFormData(prev => ({
         ...prev,
