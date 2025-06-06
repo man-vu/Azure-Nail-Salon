@@ -30,6 +30,10 @@ export async function getAvailableAppointmentsForDesigner(idOrName) {
 export async function designerCanPerformService(designerId, serviceId) {
   const id = await resolveDesignerId(designerId);
   if (!id) return false;
-  const count = await prisma.designerServices.count({ where: { designerId: id, serviceId } });
+  const svcId = typeof serviceId === 'string' ? parseInt(serviceId, 10) : serviceId;
+  if (Number.isNaN(svcId)) return false;
+  const count = await prisma.designerServices.count({
+    where: { designerId: id, serviceId: svcId }
+  });
   return count > 0;
 }
