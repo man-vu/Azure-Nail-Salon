@@ -288,8 +288,7 @@ INSERT INTO DesignerServices (designerId, serviceId) VALUES
   (3, 34),
   (4, 35),
   (5, 36),
-  (6, 37),
-  (7, 38);
+  (6, 37);
 GO
 
 -- Seed data for AvailableAppointments
