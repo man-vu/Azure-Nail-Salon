@@ -2,6 +2,8 @@ import { prisma } from '../prisma/client.js';
 
 export async function resolveServiceId(idOrName) {
   if (typeof idOrName === 'number') return idOrName;
+  const parsed = parseInt(idOrName, 10);
+  if (!Number.isNaN(parsed)) return parsed;
   const service = await prisma.services.findFirst({ where: { name: idOrName } });
   return service ? service.id : null;
 }
