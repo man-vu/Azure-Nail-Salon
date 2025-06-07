@@ -334,7 +334,7 @@ useEffect(() => {
           <div className="booking-main">
             <AnimatePresence mode="wait">
               <motion.div
-                key={step}
+                key="scheduler"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -30 }}
