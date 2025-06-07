@@ -1,0 +1,18 @@
+.prep-tips {
+  background: var(--color-bg-light);
+  padding: 1rem;
+  border-radius: 4px;
+}
+.dark .prep-tips {
+  background: var(--color-card-bg);
+}
+.prep-tips-title {
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.prep-tips-list {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  text-align: left;
+}

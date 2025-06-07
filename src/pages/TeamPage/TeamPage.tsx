@@ -31,7 +31,7 @@ const TeamPage = () => {
       <section className="team-grid">
         {data.map((designer) => (
           <TeammateCard
-            key={designer.name}
+            key={designer.id}
             name={designer.name}
             title={designer.title}
             avatar={designer.avatar}

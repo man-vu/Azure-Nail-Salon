@@ -103,7 +103,7 @@ const ServicesPage = () => {
             if (!activeCategory) return null;
             return (
               <motion.div
-                key={activeCategory.title || activeCategory.name} // must use key for AnimatePresence
+                key={activeCategory.id} // must use key for AnimatePresence
                 className="services-tabs-content"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -113,7 +113,7 @@ const ServicesPage = () => {
                 <div className="services-cards-grid">
                   {activeCategory.Services?.map((svc, i) => (
                     <motion.div
-                      key={svc.title || svc.name}
+                      key={svc.id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{

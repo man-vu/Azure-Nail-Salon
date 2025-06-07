@@ -1,0 +1,42 @@
+.booking-confirmation-page {
+  padding: 2rem;
+  text-align: center;
+}
+.booking-success-card {
+  background: #f0fdf4;
+  border: 1px solid #22c55e;
+  color: #166534;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.dark .booking-success-card {
+  background: #064e3b;
+  color: #d1fae5;
+  border-color: #16a34a;
+}
+.booking-success-icon {
+  display: block;
+  margin: 0 auto 0.75rem;
+  color: #16a34a;
+}
+.dark .booking-success-icon {
+  color: #86efac;
+}
+.booking-success-title {
+  margin-bottom: 0.5rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+.booking-details-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 2rem;
+}
+.booking-details-list li {
+  margin-bottom: 0.5rem;
+}
+.booking-confirmation-main {
+  max-width: 600px;
+  margin: 0 auto;
+}
