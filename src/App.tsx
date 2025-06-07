@@ -12,6 +12,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import Loader from './components/Loader/Loader';
 
 const BookingPage = lazy(() => import('./pages/BookingPage/BookingPage'));
+const BookingConfirmationPage = lazy(() => import('./pages/BookingConfirmationPage/BookingConfirmationPage'));
 const ServicesPage = lazy(() => import('./pages/ServicesPage/ServicesPage'));
 const TeamPage = lazy(() => import('./pages/TeamPage/TeamPage'));
 const ContactUsPage = lazy(() => import('./pages/ContactUsPage/ContactUsPage'));
@@ -58,6 +59,14 @@ function AnimatedRoutes() {
           element={
             <motion.div {...pageTransition}>
               <BookingPage />
+            </motion.div>
+          }
+        />
+        <Route
+          path="/booking/confirmation"
+          element={
+            <motion.div {...pageTransition}>
+              <BookingConfirmationPage />
             </motion.div>
           }
         />

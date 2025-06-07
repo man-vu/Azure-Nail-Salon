@@ -1,0 +1,11 @@
+.booking-confirmation-page {
+  padding: 2rem;
+  text-align: center;
+}
+.booking-confirmation-header {
+  margin-bottom: 1.5rem;
+}
+.booking-confirmation-main {
+  max-width: 600px;
+  margin: 0 auto;
+}

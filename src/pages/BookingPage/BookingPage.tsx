@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './BookingPage.css';
 import ServiceCategorySelector from '@/components/ServiceCategorySelector/ServiceCategorySelector';
 import ServiceSelector from '@/components/ServiceSelector/ServiceSelector';
@@ -26,6 +26,7 @@ const steps = [
 
 const BookingPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const navState = location.state || {};
 
   const [categories, setCategories] = useState<CategoryServiceItem[]>([]);
@@ -241,6 +242,7 @@ useEffect(() => {
           setShowReview(false);
           setStep(0);
           setFormData({ category: null, service: '', designer: '', start: null, end: null });
+          navigate('/booking/confirmation');
         } else {
           const data = await res.json().catch(() => ({}));
           let message = data.error || 'Failed to save booking.';

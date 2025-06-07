@@ -7,7 +7,7 @@ interface ReviewModalProps {
   onClose: () => void;
   onConfirm: (e: React.FormEvent) => void;
   formData: {
-    category: CategoryServiceItem;
+    category?: CategoryServiceItem | null;
     service: string;
     designer: string;
     start: Date | null;
@@ -23,7 +23,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ open, onClose, onConfirm, for
       <div className="modal-content">
         <h3>Review & Confirm</h3>
         <ul>
-          <li><strong>Category:</strong> {formData.category.title}</li>
+          <li><strong>Category:</strong> {formData.category?.title || formData.category?.name || 'N/A'}</li>
           <li><strong>Service:</strong> {formData.service}</li>
           <li><strong>Artist:</strong> {formData.designer}</li>
           <li>
