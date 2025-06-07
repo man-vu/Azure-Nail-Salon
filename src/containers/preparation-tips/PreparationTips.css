@@ -1,7 +1,10 @@
 .prep-tips {
-  background: #f8f8f8;
+  background: var(--color-bg-light);
   padding: 1rem;
   border-radius: 4px;
+}
+.dark .prep-tips {
+  background: var(--color-card-bg);
 }
 .prep-tips-title {
   margin-bottom: 0.5rem;

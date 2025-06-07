@@ -51,7 +51,8 @@ const Scheduler = ({ events, onSelectSlot, selectable }: Props) => {
       dayPropGetter={(date) => {
         const day = date.getDay();
         if (day === 0) return { className: 'rbc-day-hidden', style: { display: 'none' } };
-        if (day === 6) return { style: { backgroundColor: '#fefefe' } };
+        if (day === 6)
+          return { style: { backgroundColor: 'var(--color-bg-light)' } };
         return {};
       }}
       style={{ height: '100%' }}

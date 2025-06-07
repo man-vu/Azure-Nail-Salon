@@ -2,11 +2,20 @@
   padding: 2rem;
   text-align: center;
 }
-.booking-confirmation-header {
+.booking-success-card {
+  background: #f0fdf4;
+  border: 1px solid #22c55e;
+  color: #166534;
+  border-radius: var(--radius);
+  padding: 1rem;
   margin-bottom: 1.5rem;
 }
+.dark .booking-success-card {
+  background: #064e3b;
+  color: #d1fae5;
+  border-color: #16a34a;
+}
 .booking-success-title {
-  color: #22c55e;
   margin-bottom: 0.5rem;
 }
 .booking-details-list {
