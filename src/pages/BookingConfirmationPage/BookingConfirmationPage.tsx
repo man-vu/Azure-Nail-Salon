@@ -1,4 +1,5 @@
 import { useLocation } from 'react-router-dom';
+import { CheckCircle } from 'lucide-react';
 import PreparationTips from '@/containers/preparation-tips/PreparationTips';
 import './BookingConfirmationPage.css';
 
@@ -18,7 +19,8 @@ const BookingConfirmationPage = () => {
     <div className="booking-confirmation-page">
       <main className="booking-confirmation-main">
         <div className="booking-success-card">
-          <h2 className="booking-success-title">Your Booking is Confirmed!</h2>
+          <CheckCircle size={48} className="booking-success-icon" />
+          <h1 className="booking-success-title">Your Booking is Confirmed!</h1>
           <p>Thank you for choosing Dreamy Nail &amp; Beauty. We look forward to seeing you.</p>
           <ul className="booking-details-list">
             <li><strong>Category:</strong> {details.category || 'N/A'}</li>
