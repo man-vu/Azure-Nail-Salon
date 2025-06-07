@@ -1,4 +1,5 @@
 export interface Designer {
+  id: number;
   name: string;
   title: string;
   avatar: string;

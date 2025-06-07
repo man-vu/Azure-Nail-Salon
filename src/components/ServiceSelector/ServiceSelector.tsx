@@ -29,7 +29,7 @@ const ServiceSelector = ({ value, category, onChange, categories }: Props) => {
         <div className="service-selector-grid">
           {selectedCategory.Services.map((service) => (
             <div
-              key={service.title || service.name}
+              key={service.id}
               className={`service-selector-card ${value === (service.title || service.name) ? 'selected' : ''}`}
               onClick={() => handleSelect(service.title || service.name)}
             >

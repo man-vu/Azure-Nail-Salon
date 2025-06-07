@@ -20,7 +20,7 @@ const DesignerSelector = ({ value, onChange, designers }: Props) => {
       <div className="designer-grid">
         {list.map((designer) => (
           <div
-            key={designer.name}
+            key={designer.id}
             className={`designer-card${value === designer.name ? ' selected' : ''}`}
             onClick={() => handleSelect(designer.name)}
           >
