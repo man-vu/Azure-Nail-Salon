@@ -5,6 +5,18 @@
 .booking-confirmation-header {
   margin-bottom: 1.5rem;
 }
+.booking-success-title {
+  color: #22c55e;
+  margin-bottom: 0.5rem;
+}
+.booking-details-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 2rem;
+}
+.booking-details-list li {
+  margin-bottom: 0.5rem;
+}
 .booking-confirmation-main {
   max-width: 600px;
   margin: 0 auto;

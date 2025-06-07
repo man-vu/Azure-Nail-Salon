@@ -239,10 +239,19 @@ useEffect(() => {
       .then(async res => {
         if (res.ok) {
           setSubmissionStatus({ type: 'success', message: 'Booking saved successfully.' });
+          const categoryObj = categories.find(c => c.id === formData.category);
           setShowReview(false);
           setStep(0);
           setFormData({ category: null, service: '', designer: '', start: null, end: null });
-          navigate('/booking/confirmation');
+          navigate('/booking/confirmation', {
+            state: {
+              category: categoryObj?.title || categoryObj?.name || '',
+              service: formData.service,
+              designer: formData.designer,
+              start: formData.start?.toISOString(),
+              end: formData.end?.toISOString(),
+            },
+          });
         } else {
           const data = await res.json().catch(() => ({}));
           let message = data.error || 'Failed to save booking.';
