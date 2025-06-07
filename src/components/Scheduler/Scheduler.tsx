@@ -5,6 +5,7 @@ import { startOfWeek } from 'date-fns/startOfWeek';
 import { getDay } from 'date-fns/getDay';
 import { enUS } from 'date-fns/locale/en-US';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { useState } from 'react';
 
 const locales = { 'en-US': enUS };
 const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales });
@@ -16,6 +17,8 @@ interface Props {
 }
 
 const Scheduler = ({ events, onSelectSlot, selectable }: Props) => {
+  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+
   // Handles clicking on an "available slot event"
   const handleSelectEvent = (event: any) => {
     if (selectable) {
@@ -24,10 +27,16 @@ const Scheduler = ({ events, onSelectSlot, selectable }: Props) => {
     }
   };
 
+  const handleNavigate = (date: Date) => {
+    setCurrentDate(date);
+  };
+
   return (
     <Calendar
       localizer={localizer}
       events={events}
+      date={currentDate}
+      onNavigate={handleNavigate}
       defaultView="week"
       views={['week']}
       step={30}
