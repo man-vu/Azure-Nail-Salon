@@ -51,3 +51,39 @@ Gallery images are available from `/api/gallery`.
 ### Transactions
 
 Financial operations are stored in a `Transaction` table. Routes are available under `/api/transactions` to create and list user transactions.
+
+## Docker Container
+
+You can run the server in a Docker container. A `Dockerfile` and `.dockerignore` are
+provided in the `server/` folder.
+
+1. Build the image:
+   ```bash
+   docker build -t nailsalon-api ./server
+   ```
+2. Run the container locally:
+   ```bash
+   docker run -p 3001:3001 --env-file server/.env nailsalon-api
+   ```
+   The API will be available at `http://localhost:3001`.
+
+### Publishing to Azure Container Registry
+
+1. Create an Azure Container Registry (ACR) if you don’t have one:
+   ```bash
+   az acr create -n <registry-name> -g <resource-group> --sku Basic
+   ```
+2. Log in and push the image:
+   ```bash
+   az acr login -n <registry-name>
+   docker tag nailsalon-api <registry-name>.azurecr.io/nailsalon-api:v1
+   docker push <registry-name>.azurecr.io/nailsalon-api:v1
+   ```
+3. Test the image with Azure Container Instances or deploy it to Azure Container Apps:
+   ```bash
+   az container create -g <resource-group> --name nailsalon-api \
+      --image <registry-name>.azurecr.io/nailsalon-api:v1 --dns-name-label nailsalon-api \
+      --ports 3001 --environment-variables PORT=3001 DATABASE_URL=<connection-string>
+   ```
+
+Replace placeholders with your registry name, resource group and database connection string.
