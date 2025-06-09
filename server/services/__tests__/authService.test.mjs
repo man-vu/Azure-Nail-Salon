@@ -1,20 +1,23 @@
 import { jest } from '@jest/globals';
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const userModelPath = resolve(__dirname, '../..', 'models', 'userModel.js');
 
-jest.unstable_mockModule(userModelPath, () => ({
-  findByUsername: jest.fn(),
-  findByEmail: jest.fn(),
-  createUser: jest.fn(),
-  findByIdentifier: jest.fn()
+const userModelPath = '../../../__mocks__/userModel.mjs';
+
+jest.unstable_mockModule('bcryptjs', () => ({
+  default: {
+    hash: jest.fn(async (pw, salt) => `hashed-${pw}`),
+    compare: jest.fn()
+  }
 }));
 
-const bcrypt = await import('bcryptjs');
-const jwt = await import('jsonwebtoken');
+jest.unstable_mockModule('jsonwebtoken', () => ({
+  default: {
+    sign: jest.fn(() => 'signed-token')
+  }
+}));
+
+const bcrypt = (await import('bcryptjs')).default;
+const jwt = (await import('jsonwebtoken')).default;
 const userModel = await import(userModelPath);
 const { register, login } = await import('../authService.js');
 
