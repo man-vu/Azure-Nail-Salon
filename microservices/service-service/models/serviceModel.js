@@ -1,4 +1,4 @@
-import { prisma } from '../prisma/client.js';
+import { prisma } from '../../server/prisma/client.js';
 
 export async function resolveServiceId(idOrName) {
   if (typeof idOrName === 'number') return idOrName;

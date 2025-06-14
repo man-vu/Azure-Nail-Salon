@@ -16,6 +16,10 @@ All backend code now lives in isolated folders under `microservices/`:
 
 Install dependencies in each folder and run `npm start` to launch the service.
 
+All services share a single database schema located at `server/prisma/schema.prisma`.
+Run Prisma migrations or seeding from the `server` folder and each service will
+use the same tables via the generated client.
+
 The React frontend resolves API requests to these services using base URLs
 defined in `src/config.ts`.
 
