@@ -1,53 +1,27 @@
-# Nail Salon Backend Server
+# Shared Database Schema
 
-This folder contains an Express.js server using Prisma ORM and JWT authentication.
+This folder holds the common Prisma schema used by all backend microservices. It no longer contains an Express server.
 
 ## Setup
 
-1. Install dependencies (requires internet access):
+1. Install dependencies:
    ```bash
    cd server
    npm install
    ```
-2. Create the SQLite database using Prisma:
+2. Set a `DATABASE_URL` pointing to your SQL Server instance, then apply the schema and seed sample data:
    ```bash
+   export DATABASE_URL="sqlserver://localhost:1433;database=NailSalon;user=sa;password=Your_password123;trustservercertificate=true"
    npx prisma db push
    node prisma/seed.js
    ```
-3. Start the server:
-   ```bash
-   npm start
-   ```
 
-The server runs on port `3001` by default.
+The generated Prisma client (`prisma/client.js`) is imported by each microservice.
 
 ## MSSQL Database
 
-If you prefer to use Microsoft SQL Server, run the SQL script at `server/mssql/schema.sql`:
+If you prefer to initialize the database manually, run the SQL script in `mssql/schema.sql` using `sqlcmd`:
 
 ```bash
 sqlcmd -S <your-server> -i server/mssql/schema.sql
 ```
-
-This creates the same tables as the Prisma schema and inserts sample data for
-designers, service categories (including descriptions, pricing and timing
-details) and services.
-
-## Project Structure
-
-- `routes/` express route modules
-- `services/` application logic
-- `models/` database access using Prisma
-- `middleware/` authentication helpers
-
-All API endpoints are mounted under `/api`.
-
-### Reviews and Gallery
-
-Customer testimonials can be retrieved from `/api/reviews`.
-
-Gallery images are available from `/api/gallery`.
-
-### Transactions
-
-Financial operations are stored in a `Transaction` table. Routes are available under `/api/transactions` to create and list user transactions.

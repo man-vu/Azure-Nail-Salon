@@ -2,6 +2,33 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Microservices
+
+All backend code now lives in isolated folders under `microservices/`:
+
+- **auth** – user registration and login
+- **service** – service and category APIs
+- **booking** – booking creation and queries
+- **designer** – designer information and schedules
+- **transaction** – transactions for bookings
+- **review** – customer reviews
+- **gallery** – gallery image endpoints
+
+Install dependencies in each folder and run `npm start` to launch the service.
+
+Alternatively, build all containers and start them together with Docker:
+
+```bash
+docker-compose up --build
+```
+
+All services share a single database schema located at `server/prisma/schema.prisma`.
+Run Prisma migrations or seeding from the `server` folder and each service will
+use the same tables via the generated client.
+
+The React frontend resolves API requests to these services using base URLs
+defined in `src/config.ts`.
+
 ## Available Scripts
 
 In the project directory, you can run:

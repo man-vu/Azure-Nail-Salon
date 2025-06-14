@@ -13,7 +13,6 @@ import { type CategoryServiceItem } from '@/data/pricing';
 import { type Designer } from '@/data/designers';
 import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from '@/lib/useIsMobile'; // import the custom hook
-import { API_BASE_URL } from '@/config';
 import { apiFetch } from '@/lib/api';
 
 const steps = [
@@ -51,7 +50,7 @@ const BookingPage = () => {
 
 useEffect(() => {
   console.log('Fetching categories...');
-  fetch(`${API_BASE_URL}/categories`)
+  apiFetch('/categories')
     .then(async res => {
       console.log('Categories response status:', res.status);
       if (!res.ok) return [];
@@ -67,7 +66,7 @@ useEffect(() => {
     });
 
   console.log('Fetching designers...');
-  fetch(`${API_BASE_URL}/designers`)
+  apiFetch('/designers')
     .then(async res => {
       console.log('Designers response status:', res.status);
       if (!res.ok) return [];
@@ -92,7 +91,7 @@ useEffect(() => {
       setDesignerData([]);
       return;
     }
-    fetch(`${API_BASE_URL}/services/${serviceObj.id}/designers`)
+    apiFetch(`/services/${serviceObj.id}/designers`)
       .then(async res => {
         if (!res.ok) return [];
         return res.json();
@@ -119,7 +118,7 @@ useEffect(() => {
 
   useEffect(() => {
     if (!formData.designer) return;
-    fetch(`${API_BASE_URL}/designers/${formData.designer}/services`)
+    apiFetch(`/designers/${formData.designer}/services`)
       .then(async res => {
         if (!res.ok) return [];
         return res.json();
@@ -127,7 +126,7 @@ useEffect(() => {
       .then(data => setDesignerServices(Array.isArray(data) ? data : []))
       .catch(() => setDesignerServices([]));
 
-    fetch(`${API_BASE_URL}/designers/${formData.designer}/slots`)
+    apiFetch(`/designers/${formData.designer}/slots`)
       .then(async res => {
         if (!res.ok) return [];
         return res.json();

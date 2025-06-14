@@ -4,7 +4,7 @@ import GalleryCard from '../../components/GalleryCard/GalleryCard';
 import { galleryContent } from '@/data/content';
 import './Gallery.css';
 import GalleryModal from '@/components/GalleryModal/GalleryModal';
-import { API_BASE_URL } from '@/config';
+import { apiFetch } from '@/lib/api';
 
 
 const cardVariants = {
@@ -26,7 +26,7 @@ const Gallery = () => {
   const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/gallery`)
+    apiFetch('/gallery')
       .then(res => res.json())
       .then((data: { url: string }[]) => setImages(data.map(d => d.url)))
       .catch(() => {});
