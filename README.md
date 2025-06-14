@@ -6,15 +6,21 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 All backend code now lives in isolated folders under `microservices/`:
 
-- **auth-service** – user registration and login
-- **service-service** – service and category APIs
-- **booking-service** – booking creation and queries
-- **designer-service** – designer information and schedules
-- **transaction-service** – transactions for bookings
-- **review-service** – customer reviews
-- **gallery-service** – gallery image endpoints
+- **auth** – user registration and login
+- **service** – service and category APIs
+- **booking** – booking creation and queries
+- **designer** – designer information and schedules
+- **transaction** – transactions for bookings
+- **review** – customer reviews
+- **gallery** – gallery image endpoints
 
 Install dependencies in each folder and run `npm start` to launch the service.
+
+Alternatively, build all containers and start them together with Docker:
+
+```bash
+docker-compose up --build
+```
 
 All services share a single database schema located at `server/prisma/schema.prisma`.
 Run Prisma migrations or seeding from the `server` folder and each service will

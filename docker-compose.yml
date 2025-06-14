@@ -1,0 +1,72 @@
+version: '3.8'
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Your_password123"
+    ports:
+      - "1433:1433"
+  auth:
+    build: ./microservices/auth
+    environment:
+      AUTH_PORT: 3002
+      DATABASE_URL: sqlserver://db:1433;database=NailSalon;user=sa;password=Your_password123;trustservercertificate=true
+    ports:
+      - "3002:3002"
+    depends_on:
+      - db
+  service:
+    build: ./microservices/service
+    environment:
+      SERVICE_PORT: 3003
+      DATABASE_URL: sqlserver://db:1433;database=NailSalon;user=sa;password=Your_password123;trustservercertificate=true
+    ports:
+      - "3003:3003"
+    depends_on:
+      - db
+  booking:
+    build: ./microservices/booking
+    environment:
+      BOOKING_PORT: 3004
+      DATABASE_URL: sqlserver://db:1433;database=NailSalon;user=sa;password=Your_password123;trustservercertificate=true
+    ports:
+      - "3004:3004"
+    depends_on:
+      - db
+  designer:
+    build: ./microservices/designer
+    environment:
+      DESIGNER_PORT: 3005
+      DATABASE_URL: sqlserver://db:1433;database=NailSalon;user=sa;password=Your_password123;trustservercertificate=true
+    ports:
+      - "3005:3005"
+    depends_on:
+      - db
+  transaction:
+    build: ./microservices/transaction
+    environment:
+      TRANSACTION_PORT: 3006
+      DATABASE_URL: sqlserver://db:1433;database=NailSalon;user=sa;password=Your_password123;trustservercertificate=true
+    ports:
+      - "3006:3006"
+    depends_on:
+      - db
+  review:
+    build: ./microservices/review
+    environment:
+      REVIEW_PORT: 3007
+      DATABASE_URL: sqlserver://db:1433;database=NailSalon;user=sa;password=Your_password123;trustservercertificate=true
+    ports:
+      - "3007:3007"
+    depends_on:
+      - db
+  gallery:
+    build: ./microservices/gallery
+    environment:
+      GALLERY_PORT: 3008
+      DATABASE_URL: sqlserver://db:1433;database=NailSalon;user=sa;password=Your_password123;trustservercertificate=true
+    ports:
+      - "3008:3008"
+    depends_on:
+      - db
