@@ -2,6 +2,20 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Microservices
+
+All backend code now lives in isolated folders under `microservices/`:
+
+- **auth-service** – user registration and login
+- **service-service** – service and category APIs
+- **booking-service** – booking creation and queries
+- **designer-service** – designer information and schedules
+- **transaction-service** – transactions for bookings
+- **review-service** – customer reviews
+- **gallery-service** – gallery image endpoints
+
+Install dependencies in each folder and run `npm start` to launch the service.
+
 ## Available Scripts
 
 In the project directory, you can run:

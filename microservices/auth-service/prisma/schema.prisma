@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = "sqlserver://localhost:1433;database=NailSalon;integratedSecurity=true;trustservercertificate=true"
+}
+
+model Bookings {
+  id           Int            @id(map: "PK__Bookings__3213E83FF3B7B2D1") @default(autoincrement())
+  userId       Int
+  designerId   Int
+  serviceId    Int
+  slotId       Int      @unique
+  startTime    DateTime
+  endTime      DateTime
+  createdAt    DateTime       @default(dbgenerated("sysdatetime()"), map: "DF__Bookings__create__440B1D61")
+  Designers    Designers      @relation(fields: [designerId], references: [id], onUpdate: NoAction, map: "FK_Booking_Designer")
+  Services     Services       @relation(fields: [serviceId], references: [id], onUpdate: NoAction, map: "FK_Booking_Service")
+  AvailableAppointments AvailableAppointments @relation(fields: [slotId], references: [id], onUpdate: NoAction, map: "FK_Booking_Available")
+  Users        Users          @relation(fields: [userId], references: [id], onUpdate: NoAction, map: "FK_Booking_User")
+  Transactions Transactions[]
+}
+
+model CustomerReviews {
+  id     Int     @id(map: "PK__Customer__3213E83F9C6C66DE") @default(autoincrement())
+  name   String  @db.NVarChar(100)
+  role   String? @db.NVarChar(100)
+  image  String? @db.NVarChar(255)
+  quote  String  @db.NVarChar(255)
+  rating Int
+}
+
+model Designers {
+  id       Int        @id(map: "PK__Designer__3213E83FD8DE54E7") @default(autoincrement())
+  name     String     @db.NVarChar(50)
+  title    String     @db.NVarChar(100)
+  avatar   String     @db.NVarChar(255)
+  bio      String     @db.NVarChar(255)
+  Bookings Bookings[]
+  DesignerServices DesignerServices[]
+  AvailableAppointments AvailableAppointments[]
+}
+
+model GalleryImages {
+  id      Int     @id(map: "PK__GalleryI__3213E83FAB6EDD66") @default(autoincrement())
+  url     String  @db.NVarChar(255)
+  caption String? @db.NVarChar(255)
+}
+
+model ServiceCategories {
+  id               Int        @id(map: "PK__ServiceC__3213E83F0C5AAEED") @default(autoincrement())
+  name             String     @unique(map: "UQ__ServiceC__72E12F1BC1D969F9") @db.NVarChar(100)
+  image            String     @db.NVarChar(255)
+  description      String     @db.NVarChar(255)
+  shortDescription String     @db.NVarChar(255)
+  cost             Decimal    @db.Decimal(10, 2)
+  currency         String     @db.NVarChar(10)
+  durationMin      Int
+  durationMax      Int
+  Services         Services[]
+}
+
+model Services {
+  id                Int               @id(map: "PK__Services__3213E83F22D26F09") @default(autoincrement())
+  name              String            @db.NVarChar(100)
+  description       String            @db.NVarChar(255)
+  price             Decimal           @db.Decimal(10, 2)
+  duration          Int
+  image             String?           @db.NVarChar(255)
+  categoryId        Int
+  Bookings          Bookings[]
+  DesignerServices  DesignerServices[]
+  ServiceCategories ServiceCategories @relation(fields: [categoryId], references: [id], onUpdate: NoAction, map: "FK_Service_Category")
+}
+
+model Transactions {
+  id        Int      @id(map: "PK__Transact__3213E83FD71BBC41") @default(autoincrement())
+  bookingId Int
+  userId    Int
+  amount    Decimal  @db.Decimal(10, 2)
+  currency  String   @db.NVarChar(10)
+  status    String   @db.NVarChar(50)
+  createdAt DateTime @default(dbgenerated("sysdatetime()"), map: "DF__Transacti__creat__49C3F6B7")
+  Bookings  Bookings @relation(fields: [bookingId], references: [id], onUpdate: NoAction, map: "FK_Transaction_Booking")
+  Users     Users    @relation(fields: [userId], references: [id], onUpdate: NoAction, map: "FK_Transaction_User")
+}
+
+model Users {
+  id           Int            @id(map: "PK__Users__3213E83F21E12D7D") @default(autoincrement())
+  username     String         @unique(map: "UQ__Users__F3DBC572B6742DAF") @db.NVarChar(50)
+  email        String         @unique(map: "UQ__Users__AB6E61640849D998") @db.NVarChar(255)
+  phone        String?        @db.NVarChar(50)
+  firstName    String         @db.NVarChar(50)
+  lastName     String         @db.NVarChar(50)
+  language     String         @db.NVarChar(20)
+  password     String         @db.NVarChar(255)
+  createdAt    DateTime       @default(dbgenerated("sysdatetime()"), map: "DF__Users__createdAt__398D8EEE")
+  Bookings     Bookings[]
+  Transactions Transactions[]
+}
+
+model DesignerServices {
+  id         Int       @id @default(autoincrement())
+  designerId Int
+  serviceId  Int
+  Designers  Designers @relation(fields: [designerId], references: [id], onUpdate: NoAction, map: "FK_DS_Designer")
+  Services   Services  @relation(fields: [serviceId], references: [id], onUpdate: NoAction, map: "FK_DS_Service")
+  @@unique([designerId, serviceId], map: "UQ_Designer_Service")
+}
+
+model AvailableAppointments {
+  id         Int       @id @default(autoincrement())
+  designerId Int
+  startTime  DateTime
+  endTime    DateTime
+  booked     Boolean   @default(false)
+  Designers  Designers @relation(fields: [designerId], references: [id], onUpdate: NoAction, map: "FK_Available_Designer")
+  Bookings   Bookings?
+}
