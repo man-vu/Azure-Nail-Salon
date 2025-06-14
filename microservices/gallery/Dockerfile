@@ -1,6 +1,7 @@
 FROM node:18
 WORKDIR /app
-COPY package*.json ./
+COPY microservices/gallery ./microservices/gallery
+COPY server/prisma ./server/prisma
+WORKDIR /app/microservices/gallery
 RUN npm install --production
-COPY . .
 CMD ["node", "index.js"]

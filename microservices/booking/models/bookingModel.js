@@ -1,4 +1,4 @@
-import { prisma } from '../../server/prisma/client.js';
+import { prisma } from '../prisma/client.js';
 
 export function getBookingsForUser(userId) {
   return prisma.bookings.findMany({

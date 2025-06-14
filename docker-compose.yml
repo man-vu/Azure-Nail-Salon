@@ -8,7 +8,9 @@ services:
     ports:
       - "1433:1433"
   auth:
-    build: ./microservices/auth
+    build:
+      context: .
+      dockerfile: microservices/auth/Dockerfile
     environment:
       AUTH_PORT: 3002
       DATABASE_URL: sqlserver://db:1433;database=NailSalon;user=sa;password=Your_password123;trustservercertificate=true
@@ -17,7 +19,9 @@ services:
     depends_on:
       - db
   service:
-    build: ./microservices/service
+    build:
+      context: .
+      dockerfile: microservices/service/Dockerfile
     environment:
       SERVICE_PORT: 3003
       DATABASE_URL: sqlserver://db:1433;database=NailSalon;user=sa;password=Your_password123;trustservercertificate=true
@@ -26,7 +30,9 @@ services:
     depends_on:
       - db
   booking:
-    build: ./microservices/booking
+    build:
+      context: .
+      dockerfile: microservices/booking/Dockerfile
     environment:
       BOOKING_PORT: 3004
       DATABASE_URL: sqlserver://db:1433;database=NailSalon;user=sa;password=Your_password123;trustservercertificate=true
@@ -35,7 +41,9 @@ services:
     depends_on:
       - db
   designer:
-    build: ./microservices/designer
+    build:
+      context: .
+      dockerfile: microservices/designer/Dockerfile
     environment:
       DESIGNER_PORT: 3005
       DATABASE_URL: sqlserver://db:1433;database=NailSalon;user=sa;password=Your_password123;trustservercertificate=true
@@ -44,7 +52,9 @@ services:
     depends_on:
       - db
   transaction:
-    build: ./microservices/transaction
+    build:
+      context: .
+      dockerfile: microservices/transaction/Dockerfile
     environment:
       TRANSACTION_PORT: 3006
       DATABASE_URL: sqlserver://db:1433;database=NailSalon;user=sa;password=Your_password123;trustservercertificate=true
@@ -53,7 +63,9 @@ services:
     depends_on:
       - db
   review:
-    build: ./microservices/review
+    build:
+      context: .
+      dockerfile: microservices/review/Dockerfile
     environment:
       REVIEW_PORT: 3007
       DATABASE_URL: sqlserver://db:1433;database=NailSalon;user=sa;password=Your_password123;trustservercertificate=true
@@ -62,7 +74,9 @@ services:
     depends_on:
       - db
   gallery:
-    build: ./microservices/gallery
+    build:
+      context: .
+      dockerfile: microservices/gallery/Dockerfile
     environment:
       GALLERY_PORT: 3008
       DATABASE_URL: sqlserver://db:1433;database=NailSalon;user=sa;password=Your_password123;trustservercertificate=true
