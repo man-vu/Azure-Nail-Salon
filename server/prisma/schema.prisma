@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "sqlserver"
-  url      = "sqlserver://localhost:1433;database=NailSalon;integratedSecurity=true;trustservercertificate=true"
+  url      = env("DATABASE_URL")
 }
 
 model Bookings {

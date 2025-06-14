@@ -9,8 +9,9 @@ This folder holds the common Prisma schema used by all backend microservices. It
    cd server
    npm install
    ```
-2. Apply the schema and seed sample data:
+2. Set a `DATABASE_URL` pointing to your SQL Server instance, then apply the schema and seed sample data:
    ```bash
+   export DATABASE_URL="sqlserver://localhost:1433;database=NailSalon;user=sa;password=Your_password123;trustservercertificate=true"
    npx prisma db push
    node prisma/seed.js
    ```
