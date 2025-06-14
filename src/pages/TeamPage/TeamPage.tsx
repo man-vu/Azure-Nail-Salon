@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import TeammateCard from "../../components/TeammateCard/TeammateCard";
 import "./TeamPage.css";
 import { type Designer } from "../../data/designers";
-import { API_BASE_URL } from "@/config";
+import { apiFetch } from '@/lib/api';
 
 const TeamPage = () => {
   const [team, setTeam] = useState<Designer[]>([]);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/designers`)
+    apiFetch('/designers')
       .then(res => res.json())
       .then(setTeam)
       .catch(() => setTeam([]));

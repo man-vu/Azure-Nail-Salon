@@ -3,7 +3,7 @@ import './ServicesPage.css';
 import OurServiceCard from '@/components/OurServiceCard/OurServiceCard';
 import { Button } from '@/components/ui/button';
 import { type CategoryServiceItem } from '@/data/pricing';
-import { API_BASE_URL } from '@/config';
+import { apiFetch } from '@/lib/api';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -64,7 +64,7 @@ const ServicesPage = () => {
   const [tab, setTab] = useState('');
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/categories`)
+    apiFetch('/categories')
       .then(res => res.json())
       .then(setData)
       .catch(() => setData([]));

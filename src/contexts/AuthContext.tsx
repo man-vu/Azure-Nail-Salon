@@ -21,7 +21,6 @@ interface AuthContextProps {
   logout: () => void;
 }
 
-import { API_BASE_URL } from '@/config';
 import { apiFetch } from '@/lib/api';
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -50,7 +49,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     identifier: string,
     password: string
   ): Promise<AuthResult> => {
-    const res = await fetch(`${API_BASE_URL}/login`, {
+    const res = await apiFetch('/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ identifier, password })
@@ -80,7 +79,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const register = async (
     data: User & { password: string }
   ): Promise<AuthResult> => {
-    const res = await fetch(`${API_BASE_URL}/register`, {
+    const res = await apiFetch('/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)

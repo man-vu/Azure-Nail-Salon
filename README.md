@@ -16,6 +16,9 @@ All backend code now lives in isolated folders under `microservices/`:
 
 Install dependencies in each folder and run `npm start` to launch the service.
 
+The React frontend resolves API requests to these services using base URLs
+defined in `src/config.ts`.
+
 ## Available Scripts
 
 In the project directory, you can run:
