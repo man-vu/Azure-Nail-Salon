@@ -115,6 +115,39 @@
       }
     },
     {
+      "type": "Microsoft.ApiManagement/service",
+      "apiVersion": "2023-03-01-preview",
+      "name": "[concat(parameters('registryName'), '-apim')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Developer",
+        "capacity": 1
+      },
+      "properties": {
+        "publisherEmail": "mvu090@uottawa.ca",
+        "publisherName": "Man Vu",
+        "virtualNetworkType": "None"
+      }
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apis",
+      "apiVersion": "2023-03-01-preview",
+      "name": "[concat(parameters('registryName'), '-apim/gateway')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service', concat(parameters('registryName'), '-apim'))]",
+        "[resourceId('Microsoft.ContainerInstance/containerGroups', 'gateway-cg')]"
+      ],
+      "properties": {
+        "displayName": "Gateway API",
+        "path": "gateway",
+        "protocols": [
+          "https"
+        ],
+        "serviceUrl": "[concat('http://', reference(resourceId('Microsoft.ContainerInstance/containerGroups', 'gateway-cg'), '2023-05-01').ipAddress.fqdn, ':3001')]",
+        "apiRevision": "1"
+      }
+    },
+    {
       "copy": {
         "name": "serviceLoop",
         "count": "[length(variables('microservices'))]"
@@ -215,6 +248,10 @@
     "galleryFqdn": {
       "type": "string",
       "value": "[reference(resourceId('Microsoft.ContainerInstance/containerGroups', 'gallery-cg'), '2023-05-01').ipAddress.fqdn]"
+    },
+    "apimGatewayUrl": {
+      "type": "string",
+      "value": "[concat('https://', reference(resourceId('Microsoft.ApiManagement/service', concat(parameters('registryName'), '-apim'))).gatewayUrl, '/gateway')]"
     }
   }
 }
