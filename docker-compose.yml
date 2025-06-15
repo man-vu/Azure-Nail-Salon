@@ -1,5 +1,28 @@
 version: '3.8'
 services:
+  gateway:
+    build:
+      context: .
+      dockerfile: microservices/gateway/Dockerfile
+    environment:
+      GATEWAY_PORT: 3001
+      AUTH_URL: http://auth:3002
+      SERVICE_URL: http://service:3003
+      BOOKING_URL: http://booking:3004
+      DESIGNER_URL: http://designer:3005
+      TRANSACTION_URL: http://transaction:3006
+      REVIEW_URL: http://review:3007
+      GALLERY_URL: http://gallery:3008
+    ports:
+      - "3001:3001"
+    depends_on:
+      - auth
+      - service
+      - booking
+      - designer
+      - transaction
+      - review
+      - gallery
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest
     environment:

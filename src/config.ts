@@ -8,4 +8,6 @@ export const SERVICE_URLS = {
   gallery: 'http://localhost:3008'
 } as const;
 
+export const API_GATEWAY_URL = 'http://localhost:3001';
+
 export type ServiceKey = keyof typeof SERVICE_URLS;
