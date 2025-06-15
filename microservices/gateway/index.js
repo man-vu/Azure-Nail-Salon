@@ -8,17 +8,15 @@ dotenv.config();
 const app = express();
 app.use(cors({ origin: "*", credentials: true }));
 
-const location = process.env.AZURE_LOCATION || "westus2";
-const prod = process.env.NODE_ENV === "production";
-
+// *** Hardcoded service URLs for testing ***
 const services = {
-  auth: process.env.AUTH_URL,
-  services: process.env.SERVICE_URL,
-  bookings: process.env.BOOKING_URL,
-  designers: process.env.DESIGNER_URL,
-  transactions: process.env.TRANSACTION_URL,
-  reviews: process.env.REVIEW_URL,
-  gallery: process.env.GALLERY_URL,
+  auth: "http://nailsalon-auth-nczp55iaahvco.westus2.azurecontainer.io:3002",
+  services: "http://nailsalon-service-cl36oxplemd6a.westus2.azurecontainer.io:3003",
+  bookings: "http://nailsalon-booking-5c6ay6xfrdvia.westus2.azurecontainer.io:3004",
+  designers: "http://nailsalon-designer-qxh5qunbntmo2.westus2.azurecontainer.io:3005",
+  transactions: "http://nailsalon-transaction-XXXXX.westus2.azurecontainer.io:3006",  // TODO: fill in correct FQDN
+  reviews: "http://nailsalon-review-XXXXX.westus2.azurecontainer.io:3007",           // TODO: fill in correct FQDN
+  gallery: "http://nailsalon-gallery-2tazgvuystalg.westus2.azurecontainer.io:3008",
 };
 
 console.log("Gateway microservice target URLs:", services);
