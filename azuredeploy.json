@@ -4,10 +4,11 @@
   "parameters": {
     "location": {
       "type": "string",
-      "defaultValue": "[resourceGroup().location]"
+      "defaultValue": "westus2"  
     },
     "sqlServerName": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": "nailsalon-sqlserver2"
     },
     "sqlAdminUser": {
       "type": "string"
@@ -53,11 +54,13 @@
       "sku": {
         "name": "Basic"
       },
-      "properties": {}
+      "properties": {
+        "adminUserEnabled": true
+      }
     },
     {
       "type": "Microsoft.Sql/servers",
-      "apiVersion": "2022-11-01",
+      "apiVersion": "2021-11-01",
       "name": "[parameters('sqlServerName')]",
       "location": "[parameters('location')]",
       "properties": {
@@ -68,7 +71,7 @@
     },
     {
       "type": "Microsoft.Sql/servers/databases",
-      "apiVersion": "2022-11-01",
+      "apiVersion": "2021-11-01",
       "name": "[format('{0}/{1}', parameters('sqlServerName'), parameters('databaseName'))]",
       "dependsOn": [
         "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
@@ -79,7 +82,7 @@
     },
     {
       "type": "Microsoft.Sql/servers/firewallRules",
-      "apiVersion": "2022-11-01",
+      "apiVersion": "2021-11-01",
       "name": "[format('{0}/AllowAllWindowsAzureIps', parameters('sqlServerName'))]",
       "dependsOn": [
         "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"

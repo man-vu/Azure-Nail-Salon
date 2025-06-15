@@ -19,6 +19,7 @@ const services = {
 };
 
 app.use('/auth', createProxyMiddleware({ target: services.auth, changeOrigin: true }));
+app.use('/categories', createProxyMiddleware({ target: services.services, changeOrigin: true }));
 app.use('/services', createProxyMiddleware({ target: services.services, changeOrigin: true }));
 app.use('/bookings', createProxyMiddleware({ target: services.bookings, changeOrigin: true }));
 app.use('/designers', createProxyMiddleware({ target: services.designers, changeOrigin: true }));
