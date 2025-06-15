@@ -1,28 +1,9 @@
-import { SERVICE_URLS } from '@/config';
+import { API_GATEWAY_URL } from '@/config';
 
-function getBaseUrl(path: string): string {
-  if (path.startsWith('/login') || path.startsWith('/register') || path.startsWith('/me')) {
-    return SERVICE_URLS.auth;
-  }
-  if (path.startsWith('/services') || path.startsWith('/categories')) {
-    return SERVICE_URLS.services;
-  }
-  if (path.startsWith('/bookings')) {
-    return SERVICE_URLS.bookings;
-  }
-  if (path.startsWith('/designers')) {
-    return SERVICE_URLS.designers;
-  }
-  if (path.startsWith('/transactions')) {
-    return SERVICE_URLS.transactions;
-  }
-  if (path.startsWith('/reviews')) {
-    return SERVICE_URLS.reviews;
-  }
-  if (path.startsWith('/gallery')) {
-    return SERVICE_URLS.gallery;
-  }
-  return '';
+const APIM_SUBSCRIPTION_KEY = "ddf4f8c73613441fa3b246d5c4662ac6"; // <--- your key
+
+function getBaseUrl(_path: string): string {
+  return API_GATEWAY_URL;
 }
 
 export function apiFetch(path: string, options: RequestInit = {}) {
@@ -30,6 +11,7 @@ export function apiFetch(path: string, options: RequestInit = {}) {
   const headers = {
     ...(options.headers || {}),
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    "Ocp-Apim-Subscription-Key": APIM_SUBSCRIPTION_KEY, // <--- always include
   } as HeadersInit;
 
   const base = getBaseUrl(path);

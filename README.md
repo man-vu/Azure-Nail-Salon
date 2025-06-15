@@ -13,6 +13,7 @@ All backend code now lives in isolated folders under `microservices/`:
 - **transaction** – transactions for bookings
 - **review** – customer reviews
 - **gallery** – gallery image endpoints
+- **gateway** – API gateway routing requests to all services
 
 Install dependencies in each folder and run `npm start` to launch the service.
 
@@ -26,8 +27,29 @@ All services share a single database schema located at `server/prisma/schema.pri
 Run Prisma migrations or seeding from the `server` folder and each service will
 use the same tables via the generated client.
 
-The React frontend resolves API requests to these services using base URLs
-defined in `src/config.ts`.
+The React frontend resolves API requests to these services using a base URL
+configured via environment variables. Two `.env` files are provided:
+
+```
+.env.development   # used when running `npm run dev`
+.env.production    # used for production builds
+```
+
+Both define `VITE_API_GATEWAY_URL` which points the frontend to the API
+gateway. Update the production file with the public gateway address provisioned
+by your Azure deployment.
+
+### Deploying to Azure
+
+Provision the container registry, database and storage account using the
+provided ARM template:
+
+```bash
+az deployment group create \
+  --resource-group Dreamy-Nails-West \
+  --template-uri https://raw.githubusercontent.com/man-vu/Azure-Nail-Salon/9qw2g3-codex/deploy-application-to-azure-with-integrations/azuredeploy.json \
+  --parameters sqlAdminUser=sqladminuser sqlAdminPassword='NailS@lon2025!' registryName=nailsalonacr storageAccountName=nailsalonstorage
+```
 
 ## Available Scripts
 

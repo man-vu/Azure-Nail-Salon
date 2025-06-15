@@ -31,7 +31,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const token = localStorage.getItem('auth-token');
     if (token) {
-      apiFetch('/me')
+      apiFetch('/auth/me')
         .then(res => (res.ok ? res.json() : null))
         .then(data => {
           if (data) {
@@ -49,7 +49,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     identifier: string,
     password: string
   ): Promise<AuthResult> => {
-    const res = await apiFetch('/login', {
+    const res = await apiFetch('/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ identifier, password })
@@ -66,7 +66,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     const { token } = await res.json();
     localStorage.setItem('auth-token', token);
-    const meRes = await apiFetch('/me');
+    const meRes = await apiFetch('/auth/me');
     if (!meRes.ok) {
       return { success: false, message: 'Failed to fetch user' };
     }
@@ -79,7 +79,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const register = async (
     data: User & { password: string }
   ): Promise<AuthResult> => {
-    const res = await apiFetch('/register', {
+    const res = await apiFetch('/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)

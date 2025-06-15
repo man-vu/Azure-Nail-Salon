@@ -1,0 +1,42 @@
+name: Build and Push Microservices to ACR
+
+on:
+  push:
+    branches:
+      - 9qw2g3-codex
+    paths:
+      - '**/Dockerfile'
+      - '.github/workflows/**'
+
+jobs:
+  build-and-push:
+    name: Build and Push Docker Images
+    runs-on: ubuntu-latest
+
+    env:
+      ACR_NAME: nailsalonacr
+      ACR_LOGIN_SERVER: nailsalonacr.azurecr.io
+      IMAGE_TAG: latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Log in to ACR
+        run: az acr login --name $ACR_NAME
+
+      - name: Build and Push Microservice Images
+        run: |
+          services=(gateway auth service booking designer transaction review gallery)
+          for service in "${services[@]}"; do
+            echo "Building $service..."
+            docker build -t $ACR_LOGIN_SERVER/$service:$IMAGE_TAG ./$service
+
+            echo "Pushing $service..."
+            docker push $ACR_LOGIN_SERVER/$service:$IMAGE_TAG
+          done
