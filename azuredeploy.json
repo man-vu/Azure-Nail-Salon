@@ -123,7 +123,7 @@
       "location": "[parameters('location')]",
       "dependsOn": [
         "[resourceId('Microsoft.ContainerRegistry/registries', parameters('registryName'))]",
-        "[resourceId('Microsoft.Sql/servers/databases', parameters('sqlServerName'), parameters('databaseName'))]"
+        "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
       ],
       "properties": {
         "osType": "Linux",
