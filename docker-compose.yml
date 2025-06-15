@@ -6,13 +6,13 @@ services:
       dockerfile: microservices/gateway/Dockerfile
     environment:
       GATEWAY_PORT: 3001
-      AUTH_URL: http://auth:3002
-      SERVICE_URL: http://service:3003
-      BOOKING_URL: http://booking:3004
-      DESIGNER_URL: http://designer:3005
+      AUTH_URL: http://nailsalon-auth-nczp55iaahvco.westus2.azurecontainer.io:3002
+      SERVICE_URL: http://nailsalon-service-cl36oxplemd6a.westus2.azurecontainer.io:3003
+      BOOKING_URL: http://nailsalon-booking-5c6ay6xfrdvia.westus2.azurecontainer.io:3004
+      DESIGNER_URL: http://nailsalon-designer-qxh5qunbntmo2.westus2.azurecontainer.io:3005
       TRANSACTION_URL: http://transaction:3006
       REVIEW_URL: http://review:3007
-      GALLERY_URL: http://gallery:3008
+      GALLERY_URL: http://nailsalon-gallery-2tazgvuystalg.westus2.azurecontainer.io:3008
     ports:
       - "3001:3001"
     depends_on:
