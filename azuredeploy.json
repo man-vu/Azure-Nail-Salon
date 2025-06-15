@@ -73,6 +73,7 @@
       "type": "Microsoft.Sql/servers/databases",
       "apiVersion": "2021-11-01",
       "name": "[format('{0}/{1}', parameters('sqlServerName'), parameters('databaseName'))]",
+      "location": "[parameters('location')]",
       "dependsOn": [
         "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
       ],
@@ -84,6 +85,7 @@
       "type": "Microsoft.Sql/servers/firewallRules",
       "apiVersion": "2021-11-01",
       "name": "[format('{0}/AllowAllWindowsAzureIps', parameters('sqlServerName'))]",
+      "location": "[parameters('location')]",
       "dependsOn": [
         "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
       ],
