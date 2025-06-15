@@ -13,6 +13,7 @@ All backend code now lives in isolated folders under `microservices/`:
 - **transaction** – transactions for bookings
 - **review** – customer reviews
 - **gallery** – gallery image endpoints
+- **gateway** – API gateway routing requests to all services
 
 Install dependencies in each folder and run `npm start` to launch the service.
 
