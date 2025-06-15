@@ -4,7 +4,7 @@
   "parameters": {
     "location": {
       "type": "string",
-      "defaultValue": "westus2"  
+      "defaultValue": "westus2"
     },
     "sqlServerName": {
       "type": "string",
@@ -29,6 +29,10 @@
     },
     "storageAccountName": {
       "type": "string"
+    },
+    "dnsNameLabelPrefix": {
+      "type": "string",
+      "defaultValue": "nailsalon"
     }
   },
   "variables": {
@@ -39,8 +43,6 @@
       { "name": "service", "port": 3003, "portEnv": "SERVICE_PORT" },
       { "name": "booking", "port": 3004, "portEnv": "BOOKING_PORT" },
       { "name": "designer", "port": 3005, "portEnv": "DESIGNER_PORT" },
-      
-      
       { "name": "gallery", "port": 3008, "portEnv": "GALLERY_PORT" }
     ],
     "registryLoginServer": "[concat(parameters('registryName'), '.azurecr.io')]"
@@ -135,7 +137,8 @@
               "protocol": "tcp",
               "port": "[variables('microservices')[copyIndex('serviceLoop')].port]"
             }
-          ]
+          ],
+          "dnsNameLabel": "[toLower(concat(parameters('dnsNameLabelPrefix'), '-', variables('microservices')[copyIndex('serviceLoop')].name, '-', uniqueString(resourceGroup().id, variables('microservices')[copyIndex('serviceLoop')].name)))]"
         },
         "containers": [
           {
@@ -188,6 +191,30 @@
     "staticSiteUrl": {
       "type": "string",
       "value": "[reference(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2023-01-01').primaryEndpoints.web]"
+    },
+    "gatewayFqdn": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.ContainerInstance/containerGroups', 'gateway-cg'), '2023-05-01').ipAddress.fqdn]"
+    },
+    "authFqdn": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.ContainerInstance/containerGroups', 'auth-cg'), '2023-05-01').ipAddress.fqdn]"
+    },
+    "serviceFqdn": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.ContainerInstance/containerGroups', 'service-cg'), '2023-05-01').ipAddress.fqdn]"
+    },
+    "bookingFqdn": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.ContainerInstance/containerGroups', 'booking-cg'), '2023-05-01').ipAddress.fqdn]"
+    },
+    "designerFqdn": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.ContainerInstance/containerGroups', 'designer-cg'), '2023-05-01').ipAddress.fqdn]"
+    },
+    "galleryFqdn": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.ContainerInstance/containerGroups', 'gallery-cg'), '2023-05-01').ipAddress.fqdn]"
     }
   }
 }
