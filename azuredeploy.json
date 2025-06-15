@@ -76,6 +76,12 @@
       "apiVersion": "2021-11-01",
       "name": "[format('{0}/{1}', parameters('sqlServerName'), parameters('databaseName'))]",
       "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard",
+        "tier": "Standard",
+        "capacity": 10,
+        "family": "Gen5"
+      },
       "dependsOn": [
         "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
       ],
@@ -195,8 +201,8 @@
               ],
               "resources": {
                 "requests": {
-                  "cpu": 1,
-                  "memoryInGB": 1
+                  "cpu": 0.5,
+                  "memoryInGB": 0.5
                 }
               }
             }
