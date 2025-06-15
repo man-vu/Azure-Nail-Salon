@@ -1,0 +1,187 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "sqlServerName": {
+      "type": "string"
+    },
+    "sqlAdminUser": {
+      "type": "string"
+    },
+    "sqlAdminPassword": {
+      "type": "securestring"
+    },
+    "databaseName": {
+      "type": "string",
+      "defaultValue": "NailSalon"
+    },
+    "registryName": {
+      "type": "string"
+    },
+    "imageTag": {
+      "type": "string",
+      "defaultValue": "latest"
+    },
+    "storageAccountName": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "databaseUrl": "[concat('sqlserver://', parameters('sqlServerName'), '.database.windows.net:1433;database=', parameters('databaseName'), ';user=', parameters('sqlAdminUser'), ';password=', parameters('sqlAdminPassword'), ';encrypt=true')]",
+    "microservices": [
+      { "name": "auth", "port": 3002, "portEnv": "AUTH_PORT" },
+      { "name": "service", "port": 3003, "portEnv": "SERVICE_PORT" },
+      { "name": "booking", "port": 3004, "portEnv": "BOOKING_PORT" },
+      { "name": "designer", "port": 3005, "portEnv": "DESIGNER_PORT" },
+      { "name": "transaction", "port": 3006, "portEnv": "TRANSACTION_PORT" },
+      { "name": "review", "port": 3007, "portEnv": "REVIEW_PORT" },
+      { "name": "gallery", "port": 3008, "portEnv": "GALLERY_PORT" }
+    ],
+    "registryLoginServer": "[concat(parameters('registryName'), '.azurecr.io')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ContainerRegistry/registries",
+      "apiVersion": "2023-01-01-preview",
+      "name": "[parameters('registryName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Basic"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Sql/servers",
+      "apiVersion": "2022-11-01",
+      "name": "[parameters('sqlServerName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "administratorLogin": "[parameters('sqlAdminUser')]",
+        "administratorLoginPassword": "[parameters('sqlAdminPassword')]",
+        "version": "12.0"
+      }
+    },
+    {
+      "type": "Microsoft.Sql/servers/databases",
+      "apiVersion": "2022-11-01",
+      "name": "[format('{0}/{1}', parameters('sqlServerName'), parameters('databaseName'))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+      ],
+      "properties": {
+        "readScale": "Disabled"
+      }
+    },
+    {
+      "type": "Microsoft.Sql/servers/firewallRules",
+      "apiVersion": "2022-11-01",
+      "name": "[format('{0}/AllowAllWindowsAzureIps', parameters('sqlServerName'))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+      ],
+      "properties": {
+        "startIpAddress": "0.0.0.0",
+        "endIpAddress": "0.0.0.0"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2023-01-01",
+      "name": "[parameters('storageAccountName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "supportsHttpsTrafficOnly": true,
+        "staticWebsite": {
+          "enabled": true,
+          "indexDocument": "index.html",
+          "error404Document": "index.html"
+        }
+      }
+    },
+    {
+      "copy": {
+        "name": "serviceLoop",
+        "count": "[length(variables('microservices'))]"
+      },
+      "type": "Microsoft.ContainerInstance/containerGroups",
+      "apiVersion": "2023-05-01",
+      "name": "[format('{0}-cg', variables('microservices')[copyIndex('serviceLoop')].name)]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ContainerRegistry/registries', parameters('registryName'))]",
+        "[resourceId('Microsoft.Sql/servers/databases', parameters('sqlServerName'), parameters('databaseName'))]"
+      ],
+      "properties": {
+        "osType": "Linux",
+        "restartPolicy": "Always",
+        "ipAddress": {
+          "type": "Public",
+          "ports": [
+            {
+              "protocol": "tcp",
+              "port": "[variables('microservices')[copyIndex('serviceLoop')].port]"
+            }
+          ]
+        },
+        "containers": [
+          {
+            "name": "[variables('microservices')[copyIndex('serviceLoop')].name]",
+            "properties": {
+              "image": "[concat(variables('registryLoginServer'), '/', variables('microservices')[copyIndex('serviceLoop')].name, ':', parameters('imageTag'))]",
+              "ports": [
+                {
+                  "port": "[variables('microservices')[copyIndex('serviceLoop')].port]"
+                }
+              ],
+              "environmentVariables": [
+                {
+                  "name": "[variables('microservices')[copyIndex('serviceLoop')].portEnv]",
+                  "value": "[string(variables('microservices')[copyIndex('serviceLoop')].port)]"
+                },
+                {
+                  "name": "DATABASE_URL",
+                  "value": "[variables('databaseUrl')]"
+                }
+              ],
+              "resources": {
+                "requests": {
+                  "cpu": 1,
+                  "memoryInGB": 1
+                }
+              }
+            }
+          }
+        ],
+        "imageRegistryCredentials": [
+          {
+            "server": "[variables('registryLoginServer')]",
+            "username": "[parameters('registryName')]",
+            "password": "[listCredentials(resourceId('Microsoft.ContainerRegistry/registries', parameters('registryName')), '2019-05-01').passwords[0].value]"
+          }
+        ]
+      }
+    }
+  ],
+  "outputs": {
+    "registryLoginServer": {
+      "type": "string",
+      "value": "[variables('registryLoginServer')]"
+    },
+    "databaseUrl": {
+      "type": "string",
+      "value": "[variables('databaseUrl')]"
+    },
+    "staticSiteUrl": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2023-01-01').primaryEndpoints.web]"
+    }
+  }
+}
