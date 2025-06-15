@@ -4,7 +4,8 @@ $tag = "latest"
 
 foreach ($service in $services) {
     Write-Host "🚧 Building $service ..."
-    docker build -t $service ".\$service"
+    $dockerfilePath = ".\$service\Dockerfile"
+    docker build -t $service -f $dockerfilePath ..\
 
     if ($LASTEXITCODE -ne 0) {
         Write-Host "❌ Build failed for $service. Skipping tag/push."

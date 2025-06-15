@@ -39,8 +39,8 @@
       { "name": "service", "port": 3003, "portEnv": "SERVICE_PORT" },
       { "name": "booking", "port": 3004, "portEnv": "BOOKING_PORT" },
       { "name": "designer", "port": 3005, "portEnv": "DESIGNER_PORT" },
-      { "name": "transaction", "port": 3006, "portEnv": "TRANSACTION_PORT" },
-      { "name": "review", "port": 3007, "portEnv": "REVIEW_PORT" },
+      
+      
       { "name": "gallery", "port": 3008, "portEnv": "GALLERY_PORT" }
     ],
     "registryLoginServer": "[concat(parameters('registryName'), '.azurecr.io')]"
